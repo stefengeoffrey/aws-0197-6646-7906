@@ -19,8 +19,7 @@ data "terraform_remote_state" "vpc" {
 }
 
 module "eks" {
-    #source                              = "git@github.com/stefengeoffrey.git//eks?ref=3c1c68"
-    source                              =  "../../../../../modules/eks"
+    source                              = "git@github.com:stefengeoffrey/devops-terraform-modules.git//eks?ref=7726cf4e5bff1017ff21c4de1f688885bf058d28"
     cluster_name                        =  var.cluster_name
     environment                         =  var.environment
     eks_node_group_instance_types       =  var.eks_node_group_instance_types
@@ -81,7 +80,7 @@ resource "null_resource" "install_fluxcd" {
     command = <<EOT
       set -e
 
-      echo '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' | flux bootstrap github --owner=stefengeoffrey --repository=codechallenge --path=clusers/main-non-prod --personal
+      echo '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' | flux bootstrap github --owner=stefengeoffrey --repository=flux-env --branch=main --path=clusters/main-non-prod --personal
 
     EOT
   }

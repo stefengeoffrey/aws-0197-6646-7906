@@ -10,8 +10,7 @@ terraform {
 }
 
 module "vpc" {
-    #source                              = "git@github.com/stefengeoffrey.git//vpc?ref=3c1c68"
-    source                              = "../../../../../modules/vpc"
+    source                              = "git@github.com:stefengeoffrey/devops-terraform-modules.git//vpc?ref=7726cf4e5bff1017ff21c4de1f688885bf058d28"
     environment                         =  var.environment
     vpc_cidr                            =  var.vpc_cidr
     vpc_name                            =  var.vpc_name

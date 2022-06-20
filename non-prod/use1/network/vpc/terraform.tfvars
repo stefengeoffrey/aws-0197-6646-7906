@@ -8,7 +8,3 @@ availability_zones_public    =  ["us-east-1a", "us-east-1b", "us-east-1c"]
 availability_zones_private   =  ["us-east-1d", "us-east-1b", "us-east-1f"]
 cidr_block-internet_gw       =  "0.0.0.0/0"
 cidr_block-nat_gw            =  "0.0.0.0/0"
-eks_node_group_instance_types=  "t3.xlarge"
-fargate_namespace            =  "fargate-node"
-allocated_storage            =  100
-storage_type                 =  "io1"
