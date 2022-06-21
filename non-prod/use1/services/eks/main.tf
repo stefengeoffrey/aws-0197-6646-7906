@@ -19,45 +19,15 @@ data "terraform_remote_state" "vpc" {
 }
 
 module "eks" {
-    source                              = "git@github.com:stefengeoffrey/devops-terraform-modules.git//eks?ref=7726cf4e5bff1017ff21c4de1f688885bf058d28"
+    source                              = "git@github.com:stefengeoffrey/devops-terraform-modules.git//eks?ref=87621562d5246c97a956154acb8a2c57cb2b6dba"
     cluster_name                        =  var.cluster_name
     environment                         =  var.environment
     eks_node_group_instance_types       =  var.eks_node_group_instance_types
     private_subnets                     =  data.terraform_remote_state.vpc.outputs.aws_subnets_private
     public_subnets                      =  data.terraform_remote_state.vpc.outputs.aws_subnets_public
+    region                              =  var.region
 }
 
-resource "aws_eks_addon" "kube_proxy" {
-  cluster_name      = "${var.cluster_name}-${var.environment}"
-  addon_name        = "kube-proxy"
-  addon_version     = "v1.21.2-eksbuild.2"
-  resolve_conflicts = "OVERWRITE"
-}
-
-resource "aws_eks_addon" "core_dns" {
-  cluster_name      = "${var.cluster_name}-${var.environment}"
-  addon_name        = "coredns"
-  addon_version     = "v1.8.4-eksbuild.1"
-  resolve_conflicts = "OVERWRITE"
-}
-
-resource "null_resource" "merge_kubeconfig" {
-  triggers = {
-    always = timestamp()
-  }
-
-  depends_on = [module.eks]
-
-  provisioner "local-exec" {
-    interpreter = ["/bin/bash", "-c"]
-    command = <<EOT
-      set -e
-      echo 'Applying Auth ConfigMap with kubectl...'
-      aws eks wait cluster-active --name '${var.cluster_name}-${var.environment}'
-      aws eks update-kubeconfig --name '${var.cluster_name}-${var.environment}' --alias '${var.cluster_name}-${var.environment}-${var.region}' --region=${var.region}
-    EOT
-  }
-}
 
 
 #flux bootstrap bitbucket-server \
