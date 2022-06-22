@@ -19,7 +19,7 @@ data "terraform_remote_state" "vpc" {
 }
 
 module "eks" {
-    source                              = "git@github.com:stefengeoffrey/devops-terraform-modules.git//eks?ref=87621562d5246c97a956154acb8a2c57cb2b6dba"
+    source                              = "git@github.com:stefengeoffrey/devops-terraform-modules.git//eks?ref=34d4f05c38c4b5b97ce73f45efc08c2f117d719f"
     cluster_name                        =  var.cluster_name
     environment                         =  var.environment
     eks_node_group_instance_types       =  var.eks_node_group_instance_types
@@ -30,42 +30,3 @@ module "eks" {
 
 
 
-#flux bootstrap bitbucket-server \
-      #--owner=my-bitbucket-username \
-      #--repository=my-repository \
-      #--branch=main \
-      #--path=clusters/my-cluster \
-      #--hostname=my-bitbucket-server.com \
-      #--personal
-
-resource "null_resource" "install_fluxcd" {
-  triggers = {
-    always = timestamp()
-  }
-
-  depends_on = [module.eks]
-
-  provisioner "local-exec" {
-    interpreter = ["/bin/bash", "-c"]
-    command = <<EOT
-      set -e
-
-      echo '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' | flux bootstrap github --owner=stefengeoffrey --repository=flux-env --branch=main --path=clusters/main-non-prod --personal
-
-    EOT
-  }
-}
-
-/*
-resource "null_resource" "kubectl" {
-  provisioner "local-exec" {
-    command = "kubectl get nodes"
-    interpreter = [
-      "/bin/bash",
-      "-c"]
-    #environment = {
-    #      KUBECONFIG = base64encode(var.kubeconfig)
-    #  }
-  }
-}
-*/
