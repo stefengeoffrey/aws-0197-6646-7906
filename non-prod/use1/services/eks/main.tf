@@ -19,7 +19,7 @@ data "terraform_remote_state" "vpc" {
 }
 
 module "eks" {
-    source                              = "git@github.com:stefengeoffrey/devops-terraform-modules.git//eks?ref=34d4f05c38c4b5b97ce73f45efc08c2f117d719f"
+    source                              = "git@github.com:stefengeoffrey/devops-terraform-modules.git//eks?ref=86621c9c5a534ccf163582f7b74c9772d181b73f"
     cluster_name                        =  var.cluster_name
     environment                         =  var.environment
     eks_node_group_instance_types       =  var.eks_node_group_instance_types
