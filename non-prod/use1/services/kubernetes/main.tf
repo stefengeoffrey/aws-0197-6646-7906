@@ -6,9 +6,19 @@ terraform {
       source = "hashicorp/aws"
       version = "~> 3.0"
     }
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.7.0"
+    }
+
   }
 }
 
+provider "helm" {
+  kubernetes {
+    config_path = "~/.kube/config"
+  }
+}
 
 resource "null_resource" "merge_kubeconfig" {
   triggers = {
@@ -27,13 +37,7 @@ resource "null_resource" "merge_kubeconfig" {
   }
 }
 
-#flux bootstrap bitbucket-server \
-      #--owner=my-bitbucket-username \
-      #--repository=my-repository \
-      #--branch=main \
-      #--path=clusters/my-cluster \
-      #--hostname=my-bitbucket-server.com \
-      #--personal
+
 
 resource "null_resource" "install_fluxcd" {
   triggers = {
@@ -46,24 +50,41 @@ resource "null_resource" "install_fluxcd" {
     command = <<EOT
       set -e
 
-      echo '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' | flux bootstrap github --owner=stefengeoffrey --repository=flux-env --branch=main --path=clusters/main-non-prod --personal
+      echo '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' | flux bootstrap github --owner=stefengeoffrey --repository=flux-env --branch=main --path=clusters/appmesh --personal
 
     EOT
   }
 }
 
-/*
+
 resource "null_resource" "kubectl" {
   provisioner "local-exec" {
-    command = "kubectl get nodes"
+    command = "kubectl apply -f https://raw.githubusercontent.com/fluxcd/flagger/main/artifacts/flagger/crd.yaml"
     interpreter = [
       "/bin/bash",
       "-c"]
-    #environment = {
-    #      KUBECONFIG = base64encode(var.kubeconfig)
-    #  }
+
+  }
+
+}
+
+
+resource "helm_release" "flagger" {
+  name       = "nginx-ingress-controller"
+
+  repository = "https://flagger.app"
+  chart      = "flagger"
+
+  set {
+    name  = "meshProvider"
+    value = "appmesh"
+  }
+
+  set {
+    name  = "metricsServer"
+    value = "http://appmesh-prometheus:9090"
   }
 }
-*/
+
 
 
