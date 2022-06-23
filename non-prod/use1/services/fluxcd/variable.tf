@@ -1,22 +1,25 @@
+
 variable "github_owner" {
   type        = string
   description = "github owner"
+  default     = "stefengeoffrey"
 }
 
 variable "github_token" {
   type        = string
   description = "github token"
+  default     =  "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"
 }
 
 variable "repository_name" {
   type        = string
-  default     = "test-provider"
+  default     = "flux-env"
   description = "github repository name"
 }
 
 variable "repository_visibility" {
   type        = string
-  default     = "private"
+  default     = "public"
   description = "How visible is the github repo"
 }
 
@@ -28,6 +31,6 @@ variable "branch" {
 
 variable "target_path" {
   type        = string
-  default     = "staging-cluster"
+  default     = "clusters/main-non-prod"
   description = "flux sync target path"
 }
