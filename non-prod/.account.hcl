@@ -1,4 +1,4 @@
 locals {
-  bucket  = "hibu-nonprod-terraform-state"
+  bucket  = "nonprod-terraform-state"
   
 }
